@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .navbar {
+            background-color: #2c3e50;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #ecf0f1 !important;
+        }
+
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #3498db !important;
+        }
+
+        .header {
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .breaking-news {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+            border-radius: 5px;
+            animation: slideIn 5s infinite alternate;
+        }
+
+        .breaking-news a {
+            color: white;
+            text-decoration: none;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .news-card {
+            margin-bottom: 30px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .news-card-body {
+            padding: 20px;
+        }
+
+        .news-card-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .news-card-text {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        #date-time {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            padding: 0 140px;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Thanh điều hướng -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Báo Online</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Trang Chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Tin Tức</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Giải Trí</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Thể Thao</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Liên Hệ</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Breaking News -->
+    <div class="breaking-news">
+        <a href="#">🔥 Tin tức nóng: Chính trị thế giới đang có những thay đổi lớn! Đọc ngay để cập nhật mọi thông tin mới nhất.</a>
+    </div>
+
+    <!-- Nội dung chính -->
+    <div class="container mt-4">
+        <h2>Chào mừng bạn đến với Báo Online!</h2>
+        <p>Chúng tôi cung cấp cho bạn những tin tức nhanh chóng, chính xác, và đa dạng nhất từ các lĩnh vực chính trị, kinh tế, giải trí, thể thao và nhiều chủ đề khác.</p>
+
+        <!-- Ví dụ tin tức -->
+        <div class="news-card">
+            <img src="https://via.placeholder.com/800x400" alt="News Image">
+            <div class="news-card-body">
+                <h3 class="news-card-title">Tin tức nóng về thị trường chứng khoán</h3>
+                <p class="news-card-text">Thị trường chứng khoán toàn cầu đã trải qua một tuần biến động mạnh mẽ với các cổ phiếu lớn bị giảm giá sâu...</p>
+                <a href="#" class="btn btn-primary">Đọc thêm</a>
+            </div>
+        </div>
+
+        <!-- Tin tức khác -->
+        <div class="news-card">
+            <img src="https://via.placeholder.com/800x400" alt="News Image">
+            <div class="news-card-body">
+                <h3 class="news-card-title">Bước tiến mới trong ngành công nghệ AI</h3>
+                <p class="news-card-text">Công nghệ trí tuệ nhân tạo đã đạt được những bước tiến đột phá với nhiều ứng dụng trong đời sống...</p>
+                <a href="#" class="btn btn-primary">Đọc thêm</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chân trang -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Báo Online. Tất cả quyền được bảo lưu. <br> Được phát triển bởi <a href="#">Nhóm Phát Triển</a>.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<h1>Danh sách bài viết</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Tiêu đề</th>
+      <th>Tác giả</th>
+      <th>Danh mục</th>
+      <th>Premium</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each articles}}
+    <tr>
+      <td>{{this.id}}</td>
+      <td>{{this.title}}</td>
+      <td>{{this.author}}</td>
+      <td>{{this.category_name}}</td>
+      <td>{{#if this.is_premium}}Có{{else}}Không{{/if}}</td>
+      <td><a href="/articles/detail?id={{this.id}}" class="btn btn-primary btn-sm">Chi tiết</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
