@@ -1,423 +1,146 @@
-{{!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background-color: #bdbfc4;
-            position: sticky; /* Đặt thanh navbar ở vị trí sticky */
-            top: 0;          /* Ghim navbar ở đỉnh trang */
-            z-index: 1000;   /* Đảm bảo navbar nằm trên các phần tử khác */
-        }
-        .navbar-brand, .nav-link {
-            color: white !important;
-        }
-        .header {
-            background-color: #6d7379;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            text-align: center;
-        }
-        .content {
-            padding: 20px;
-        }
-        .nav-item {
-            display: flex;
-            align-items: center; /* Căn giữa theo chiều dọc */
-        }
-        .home-button {
-            color: white;
-            border: 1px solid white;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin-left: 5px;
-            transition: background-color 0.3s;
-            display: inline-flex;
-            align-items: center; /* Căn giữa biểu tượng */
-        }
-        .home-button:hover {
-            background-color: white;
-            color: #0056b3;
-        }
-            #date-time {
-            text-align: center; /* Căn lề phải */
-            color: black;   /* Màu chữ (xanh lam) */
-            font-size: 1em;   /* Kích thước chữ */
-            font-weight: bold; /* In đậm chữ */
-            font-family: 'Courier New', monospace; /* Đặt phông chữ */
-            padding: 0px 140px;
-            padding-top: 4px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Tiêu đề chính -->
-    <header class="header">
-        <h1>Chào Mừng Bạn Đến Với Báo Online</h1>
-        <p>Cập nhật tin tức mới nhất mỗi ngày!</p>
-    </header>
-    <!-- Navbar chuyên mục -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="collapse navbar-collapse" id="navbarDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a href="/" class="home-button" title="Trang chủ">
-                        <i class="fas fa-home"></i>
-                    </a>
-                    <a class="nav-link dropdown-toggle" href="#" id="economicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Kinh Tế
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="economicDropdown">
-                        <a class="dropdown-item" href="/admin/menu">Tin Kinh Tế 1</a>
-                        <a class="dropdown-item" href="#">Tin Kinh Tế 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="sportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thể Thao</a>
-                    <div class="dropdown-menu" aria-labelledby="sportsDropdown">
-                        <a class="dropdown-item" href="#">Tin Thể Thao 1</a>
-                        <a class="dropdown-item" href="#">Tin Thể Thao 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="newsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thời Sự</a>
-                    <div class="dropdown-menu" aria-labelledby="newsDropdown">
-                        <a class="dropdown-item" href="#">Tin Thời Sự 1</a>
-                        <a class="dropdown-item" href="#">Tin Thời Sự 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="esportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">E-Sport</a>
-                    <div class="dropdown-menu" aria-labelledby="esportDropdown">
-                        <a class="dropdown-item" href="#">Tin E-Sport 1</a>
-                        <a class="dropdown-item" href="#">Tin E-Sport 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="videoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Video</a>
-                    <div class="dropdown-menu" aria-labelledby="videoDropdown">
-                        <a class="dropdown-item" href="#">Video 1</a>
-                        <a class="dropdown-item" href="#">Video 2</a>
-                    </div>
-                    
-                </li>
-            </ul>
-            <div id="date-time"></div>
-    <script>
-        function updateDateTime() {
-            const now = new Date();
-
-            // Ngày trong tuần
-            const weekdays = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
-            const dayOfWeek = weekdays[now.getDay()];
-
-            // Ngày, tháng, năm
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-            const year = now.getFullYear();
-
-            // Thời gian
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-
-            // Chuỗi hiển thị
-            const dateString = `${dayOfWeek}, ${day}/${month}/${year}`;
-            const timeString = `${hours}:${minutes}:${seconds}`;
-            const fullString = `${dateString} | ${timeString}`;
-
-            // Hiển thị trên trang
-            document.getElementById('date-time').textContent = fullString;
-        }
-
-        // Cập nhật thời gian mỗi giây
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-        </script>
-            <form class="form-inline ml-auto">
-                <input class="form-control mr-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">Tìm</button>
-            </form>
-            <a class="btn btn-outline-light ml-2" href="#" role="button">Đăng Nhập</a>
-        </div>
-    </nav>
-
-    <!-- Nội dung chính -->
-    <div class="content">
-        <div class="container mt-4">
-            {{{body}}}
-        </div>
-    </div>
-
-    <!-- Chân trang -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Báo Online. Tất cả quyền được bảo lưu.</p>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html> --}}
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .navbar {
-            background-color: #bdbfc4;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-brand,
-        .nav-link {
-            color: white !important;
-        }
-
-        .header {
-            background-color: #6d7379;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        .breaking-news {
-            background-color: #ff5722;
-            color: white;
-            padding: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            margin: 10px 0;
-            animation: slideIn 5s infinite alternate;
-        }
-
-        .breaking-news a {
-            color: white;
-            text-decoration: none;
-        }
-
-        @keyframes slideIn {
-            0% {
-                transform: translateX(100%);
-            }
-
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        .footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .home-button {
-            color: white;
-            border: 1px solid white;
-            border-radius: 5px;
-            padding: 5px 10px;
-            margin-left: 5px;
-            transition: background-color 0.3s;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .home-button:hover {
-            background-color: white;
-            color: #0056b3;
-        }
-
-        #date-time {
-            text-align: center;
-            color: black;
-            font-size: 1em;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            padding: 0px 140px;
-            padding-top: 4px;
-        }
-
-        .news-card {
-            margin-bottom: 20px;
-        }
-
-        .news-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
-
-        .news-card-body {
-            padding: 15px;
-        }
-
-        .news-card-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .news-card-text {
-            font-size: 1.1em;
-        }
-
-        .btn-primary {
-            background-color: #ff5722;
-            border-color: #ff5722;
-        }
-
-        .btn-primary:hover {
-            background-color: #e64a19;
-            border-color: #e64a19;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce Application</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  {{{_sections.css}}}
 </head>
 
 <body>
-    <!-- Tiêu đề chính -->
-    <header class="header">
-        <h1>Chào Mừng Bạn Đến Với Báo Online</h1>
-        <p>Cập nhật tin tức mới nhất mỗi ngày!</p>
-    </header>
 
-    <!-- Breaking News -->
-    <div class="breaking-news">
-        <a href="#">🔥 Tin tức nóng hổi: Chính trị thế giới đang thay đổi nhanh chóng!</a>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow sticky-top">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-house-fill"></i>
+      Navbar
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">Disabled</a>
+        </li>
+      </ul>
+      {{!-- <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <i class="bi bi-search"></i>
+          Search
+        </button>
+      </form> --}}
+      <ul class="navbar-nav">
+        {{#if auth}}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Hello, <b>{{authUser.name}}</b>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="/account/profile">
+              <i class="bi bi-person"></i>
+              Profile
+            </a>
+            <a class="dropdown-item" href="/account/update-password">
+              <i class="bi bi-gear"></i>
+              Change password
+            </a>
+            <div class="dropdown-divider"></div>
+            <form id="frmLogout" action="/account/logout" method="post"></form>
+            <a class="dropdown-item" href="javascript: $('#frmLogout').submit()">
+              <i class="bi bi-box-arrow-right"></i>
+              Sign out
+            </a>
+          </div>
+        </li>
+        {{else}}
+        <li class="nav-item">
+          <a class="nav-link" href="/account/login">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Sign in
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/account/register">
+            <i class="bi bi-person-plus"></i>
+            Sign up
+          </a>
+        </li>
+        {{/if}}
+      </ul>
     </div>
+  </nav>
 
-    <!-- Navbar chuyên mục -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="collapse navbar-collapse" id="navbarDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a href="/" class="home-button" title="Trang chủ">
-                        <i class="fas fa-home"></i>
-                    </a>
-                    <a class="nav-link dropdown-toggle" href="#" id="economicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Kinh Tế
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="economicDropdown">
-                        <a class="dropdown-item" href="/admin/menu">Tin Kinh Tế 1</a>
-                        <a class="dropdown-item" href="#">Tin Kinh Tế 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="sportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thể Thao</a>
-                    <div class="dropdown-menu" aria-labelledby="sportsDropdown">
-                        <a class="dropdown-item" href="#">Tin Thể Thao 1</a>
-                        <a class="dropdown-item" href="#">Tin Thể Thao 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="newsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thời Sự</a>
-                    <div class="dropdown-menu" aria-labelledby="newsDropdown">
-                        <a class="dropdown-item" href="#">Tin Thời Sự 1</a>
-                        <a class="dropdown-item" href="#">Tin Thời Sự 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="esportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">E-Sport</a>
-                    <div class="dropdown-menu" aria-labelledby="esportDropdown">
-                        <a class="dropdown-item" href="#">Tin E-Sport 1</a>
-                        <a class="dropdown-item" href="#">Tin E-Sport 2</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="videoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Video</a>
-                    <div class="dropdown-menu" aria-labelledby="videoDropdown">
-                        <a class="dropdown-item" href="#">Video 1</a>
-                        <a class="dropdown-item" href="#">Video 2</a>
-                    </div>
-                </li>
-            </ul>
-            <div id="date-time"></div>
-            <form class="form-inline ml-auto">
-                <input class="form-control mr-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">Tìm</button>
-            </form>
-            <a class="btn btn-outline-light ml-2" href="#" role="button">Đăng Nhập</a>
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="card">
+          <h5 class="card-header">
+            Categories
+          </h5>
+          <div class="list-group list-group-flush">
+            {{#each lcCategories}}
+            {{!-- <a href="/articles/byCat?id={{category_id}}" class="list-group-item list-group-item-action">
+              {{category_name}}
+            </a> --}}
+            <a href="/articles/byCat?id={{category_id}}"
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{#if active}}active{{/if}}">
+              {{category_name}}
+              {{#if ProductCount}}
+              <span class="badge badge-pill badge-danger">{{ProductCount}}</span>
+              {{/if}}
+            </a>
+            {{/each}}
+          </div>
         </div>
-    </nav>
-
-    <!-- Nội dung chính -->
-    <div class="content">
-        <div class="container mt-4">
-            <!-- Tin tức tiêu biểu -->
-            <div class="row">
-                <div class="col-md-6 news-card">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/600x400" class="card-img-top" alt="News Image">
-                        <div class="card-body">
-                            <h5 class="card-title news-card-title">Tiêu đề tin tức nổi bật 1</h5>
-                            <p class="card-text news-card-text">Mô tả ngắn gọn về tin tức. Đây là nơi bạn có thể tóm tắt các thông tin quan trọng.</p>
-                            <a href="#" class="btn btn-primary">Đọc thêm</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 news-card">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/600x400" class="card-img-top" alt="News Image">
-                        <div class="card-body">
-                            <h5 class="card-title news-card-title">Tiêu đề tin tức nổi bật 2</h5>
-                            <p class="card-text news-card-text">Mô tả ngắn gọn về tin tức. Đây là nơi bạn có thể tóm tắt các thông tin quan trọng.</p>
-                            <a href="#" class="btn btn-primary">Đọc thêm</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{{body}}}
+        <div class="card mt-3">
+          <h5 class="card-header">
+            Featured
+          </h5>
+          <div class="card-body">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
         </div>
+      </div>
+      <div class="col-sm-9">
+        {{{body}}}
+      </div>
     </div>
+  </div>
 
-    <!-- Chân trang -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Báo Online. Tất cả quyền được bảo lưu.</p>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+    integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+    crossorigin="anonymous"></script>
+  {{{_sections.js}}}
 </body>
 
 </html>
