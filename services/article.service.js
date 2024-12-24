@@ -32,7 +32,7 @@ const getTopArticlesByCategory = async () => {
 
     for (const category of categories) {
       const article = await knex('articles')
-        .where('category_id', category.id)
+        .where('category_id', category.category_id)
         .orderBy('created_at', 'desc') // Lấy bài viết mới nhất trong mỗi chuyên mục
         .first(); // Chỉ lấy bài viết đầu tiên (mới nhất)
 
@@ -57,6 +57,7 @@ const incrementView = async (articleId) => {
 
   try {
     const article = await knex('articles').where('id', articleId).first();
+
     if (!article) {
       console.log(`Không tìm thấy bài viết với ID: ${articleId}`);
       return;
@@ -161,10 +162,31 @@ const findById = async (articleId) => {
   }
 };
 
+const findByCategory = async (categoryName) => {
+  try {
+    const rows = await knex('articles')
+      .join('categories', 'articles.category_id', '=', 'categories.category_id')
+      .select(
+        'articles.id',
+        'articles.title',
+        'articles.author',
+        'articles.abstract',
+        'articles.content',
+        'articles.is_premium',
+        'categories.category_name'
+      )
+      .where('categories.category_name', categoryName); // Filter by category name
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Error while fetching articles by category');
+  }
+};
+
 const findPage = async (limit, offset) => {
   try {
     const rows = await knex('articles')
-      .join('categories', 'articles.category_id', '=', 'categories.id')
+      .join('categories', 'articles.category_id', '=', 'categories.category_id')
       .select(
         'articles.id',
         'articles.title',
@@ -193,7 +215,7 @@ const getTopCategories = async () => {
   const topCategories = [];
   for (const category of categories) {
     const topArticle = await knex('articles')
-      .where('category_id', category.id)
+      .where('category_id', category.category_id)
       .orderBy('views', 'desc')
       .first();
       
@@ -205,6 +227,29 @@ const getTopCategories = async () => {
     }
   }
   return topCategories;
+};
+const findTop5ByCategory = async (categoryId) => {
+  try {
+    const rows = await knex('articles')
+      .join('categories', 'articles.category_id', '=', 'categories.category_id')
+      .select(
+        'articles.id',
+        'articles.title',
+        'articles.author',
+        'articles.abstract',
+        'articles.content',
+        'articles.is_premium',
+        'categories.category_name'
+      )
+      .where('articles.category_id', categoryId)
+      .orderBy('articles.views', 'desc') // Sắp xếp giảm dần theo lượt xem
+      .limit(5); // Giới hạn chỉ lấy 5 bài viết
+
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục và lượt xem');
+  }
 };
 export default {
   findAll,
@@ -220,4 +265,6 @@ export default {
   getTopArticlesByCategory,
   getTopArticlesThisWeek,
   getTopCategories,
+  findByCategory,
+  findTop5ByCategory
 };

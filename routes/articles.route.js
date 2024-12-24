@@ -108,13 +108,33 @@ router.get('/', async (req, res) => {
 // Route: Hiển thị chi tiết bài viết
 router.get('/detail', async (req, res) => {
   const id = parseInt(req.query.id) || 0;
-  const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
-  await articleService.incrementView(id);
-  if (!article) {
-    return res.status(404).send('Bài viết không tồn tại');
+  try {
+    const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
+    const category = await articleService.findByCategory(id); // Lấy bài viết cùng danh mục
+    const top5category = await articleService.findTop5ByCategory(id); // Lấy 5 bài viết liên quan
+
+    console.log('Danh sách bài viết trong cùng danh mục:', category);
+    console.log('5 bài viết liên quan: ', top5category);
+
+    await articleService.incrementView(id); // Tăng lượt xem cho bài viết
+
+    if (!article) {
+      return res.status(404).send('Bài viết không tồn tại');
+    }
+
+    // Truyền cả bài viết, danh mục và 5 bài viết liên quan vào view
+    res.render('articles/detail', { 
+      article: article,
+      category: category, // Các bài viết cùng danh mục
+      top5category: top5category // 5 bài viết liên quan
+    });
+
+  } catch (error) {
+    console.error('Lỗi khi lấy bài viết:', error);
+    res.status(500).send('Đã xảy ra lỗi khi xử lý yêu cầu');
   }
-  res.render('articles/detail', { article: article });
 });
+
 router.get('/:id', async (req, res) => {
   const articleId = parseInt(req.params.id); // Lấy ID từ URL
   // In ra giá trị ID
@@ -136,4 +156,5 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Lỗi khi lấy chi tiết bài viết');
   }
 });
+
 export default router;
