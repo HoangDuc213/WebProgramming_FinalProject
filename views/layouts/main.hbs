@@ -1,146 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Commerce Application</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  {{{_sections.css}}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: #0056b3;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            flex-grow: 1; /* Làm cho content chiếm phần còn lại */
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+        }
+        .home-button {
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-left: 5px;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .home-button:hover {
+            background-color: white;
+            color: #0056b3;
+        }
+        #sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        #sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        #sidebar .nav-link {
+            color: white;
+        }
+        #sidebar .nav-item:hover {
+            background-color: #495057;
+        }
+        .sidebar-heading {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-
 <body>
-
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow sticky-top">
-    <a class="navbar-brand" href="#">
-      <i class="bi bi-house-fill"></i>
-      Navbar
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
-      </ul>
-      {{!-- <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          <i class="bi bi-search"></i>
-          Search
-        </button>
-      </form> --}}
-      <ul class="navbar-nav">
-        {{#if auth}}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Hello, <b>{{authUser.name}}</b>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="/account/profile">
-              <i class="bi bi-person"></i>
-              Profile
-            </a>
-            <a class="dropdown-item" href="/account/update-password">
-              <i class="bi bi-gear"></i>
-              Change password
-            </a>
-            <div class="dropdown-divider"></div>
-            <form id="frmLogout" action="/account/logout" method="post"></form>
-            <a class="dropdown-item" href="javascript: $('#frmLogout').submit()">
-              <i class="bi bi-box-arrow-right"></i>
-              Sign out
-            </a>
-          </div>
-        </li>
-        {{else}}
-        <li class="nav-item">
-          <a class="nav-link" href="/account/login">
-            <i class="bi bi-box-arrow-in-right"></i>
-            Sign in
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/account/register">
-            <i class="bi bi-person-plus"></i>
-            Sign up
-          </a>
-        </li>
-        {{/if}}
-      </ul>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-heading">Chuyên Mục</div>
+        <ul class="nav flex-column">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="economicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Kinh Tế
+                </a>
+                <div class="dropdown-menu" aria-labelledby="economicDropdown">
+                    <a class="dropdown-item" href="#">Tin Kinh Tế 1</a>
+                    <a class="dropdown-item" href="#">Tin Kinh Tế 2</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="sportsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Thể Thao
+                </a>
+                <div class="dropdown-menu" aria-labelledby="sportsDropdown">
+                    <a class="dropdown-item" href="#">Tin Thể Thao 1</a>
+                    <a class="dropdown-item" href="#">Tin Thể Thao 2</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="newsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Thời Sự
+                </a>
+                <div class="dropdown-menu" aria-labelledby="newsDropdown">
+                    <a class="dropdown-item" href="#">Tin Thời Sự 1</a>
+                    <a class="dropdown-item" href="#">Tin Thời Sự 2</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="esportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    E-Sport
+                </a>
+                <div class="dropdown-menu" aria-labelledby="esportDropdown">
+                    <a class="dropdown-item" href="#">Tin E-Sport 1</a>
+                    <a class="dropdown-item" href="#">Tin E-Sport 2</a>
+                </div>
+            </li>
+            <!-- Add 16 more dropdowns for other topics -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="videoDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Video
+                </a>
+                <div class="dropdown-menu" aria-labelledby="videoDropdown">
+                    <a class="dropdown-item" href="#">Video 1</a>
+                    <a class="dropdown-item" href="#">Video 2</a>
+                </div>
+            </li>
+        </ul>
     </div>
-  </nav>
 
-  <div class="container-fluid mt-4">
-    <div class="row">
-      <div class="col-sm-3">
-        <div class="card">
-          <h5 class="card-header">
-            Categories
-          </h5>
-          <div class="list-group list-group-flush">
-            {{#each lcCategories}}
-            {{!-- <a href="/articles/byCat?id={{category_id}}" class="list-group-item list-group-item-action">
-              {{category_name}}
-            </a> --}}
-            <a href="/articles/byCat?id={{category_id}}"
-              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{#if active}}active{{/if}}">
-              {{category_name}}
-              {{#if ProductCount}}
-              <span class="badge badge-pill badge-danger">{{ProductCount}}</span>
-              {{/if}}
-            </a>
-            {{/each}}
-          </div>
+    <!-- Nội dung chính -->
+    <div class="content" style="margin-left: 250px;">
+        <header class="header">
+            <h1>Chào Mừng Bạn Đến Với Báo Online</h1>
+            <p>Cập nhật tin tức mới nhất mỗi ngày!</p>
+        </header>
+
+        <!-- Navbar chuyên mục -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a href="/" class="home-button" title="Trang chủ">
+                            <i class="fas fa-home"></i>
+                        </a>
+                        <a class="nav-link dropdown-toggle" href="#" id="economicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Kinh Tế
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="economicDropdown">
+                            <a class="dropdown-item" href="/admin/menu">Tin Kinh Tế 1</a>
+                            <a class="dropdown-item" href="#">Tin Kinh Tế 2</a>
+                        </div>
+                    </li>
+                    <!-- Các mục khác sẽ được thêm vào đây -->
+                </ul>
+                <form class="form-inline ml-auto">
+                    <input class="form-control mr-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Tìm</button>
+                </form>
+                <a class="btn btn-outline-light ml-2" href="#" role="button">Đăng Nhập</a>
+            </div>
+        </nav>
+
+        <!-- Nội dung -->
+        <div class="container mt-4">
+            {{{body}}}
         </div>
-        <div class="card mt-3">
-          <h5 class="card-header">
-            Featured
-          </h5>
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-9">
-        {{{body}}}
-      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
-    integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
-    crossorigin="anonymous"></script>
-  {{{_sections.js}}}
+    <!-- Chân trang -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Báo Online. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>

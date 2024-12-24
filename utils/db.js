@@ -9,5 +9,5 @@ export default knex({
     password: '',
     database: 'newspaper'
   },
-  pool: { min: 0, max: 7 }
+  pool: { min: 0, max: 20 }
 });

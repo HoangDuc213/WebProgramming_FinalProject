@@ -1,0 +1,67 @@
+<div class="container mt-4">
+    <!-- Bài viết nổi bật nhất trong tuần -->
+    <h1 class="text-center mb-4">Bài Viết Nổi Bật Trong Tuần</h1>
+    <div class="row">
+        {{#each featuredArticles}}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{this.abstract}}</p>
+                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <!-- 10 bài viết được xem nhiều nhất -->
+    <h1 class="text-center mt-5 mb-4">Bài Viết Được Xem Nhiều Nhất</h1>
+    <div class="row">
+        {{#each mostViewedArticles}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{this.abstract}}</p>
+                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <!-- 10 bài viết mới nhất -->
+    <h1 class="text-center mt-5 mb-4">Bài Viết Mới Nhất</h1>
+    <div class="row">
+        {{#each latestArticles}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{this.abstract}}</p>
+                    <a href="/articles/detail?id={{this.id}}" class="btn btn-primary">Đọc thêm</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <!-- Top 10 chuyên mục, mỗi chuyên mục 1 bài viết mới nhất -->
+    <h1 class="text-center mt-5 mb-4">Mỗi Chuyên Mục Một Bài Viết Mới Nhất</h1>
+    <div class="row">
+        {{#each categories}}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{this.latestArticle.imageURL}}" class="card-img-top" alt="{{this.latestArticle.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.name}}: {{this.latestArticle.title}}</h5>
+                    <p class="card-text">{{this.latestArticle.abstract}}</p>
+                    <a href="/categories/detail?id={{this.id}}" class="btn btn-secondary">Xem chuyên mục</a>
+                    <a href="/articles/detail?id={{this.latestArticle.id}}" class="btn btn-primary">Đọc bài viết</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
