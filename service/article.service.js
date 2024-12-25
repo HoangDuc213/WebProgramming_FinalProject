@@ -110,7 +110,20 @@ const create = async (articleData) => {
     throw new Error('Lỗi khi lưu bài viết');
   }
 };
+const update = async (articleId, updateData) => {
+  try {
+    // Cập nhật bài viết dựa trên ID
+    await knex('articles').where('id', articleId).update(updateData);
 
+    // Lấy lại bài viết đã cập nhật
+    const updatedArticle = await knex('articles').where('id', articleId).first();
+
+    return updatedArticle;
+  } catch (err) {
+    console.error('Lỗi khi cập nhật bài viết:', err);
+    throw new Error('Lỗi khi cập nhật bài viết');
+  }
+};
 const findAll = async () => {
   try {
     const rows = await knex('articles')
@@ -161,8 +174,29 @@ const findById = async (articleId) => {
     throw new Error('Lỗi khi lấy chi tiết bài viết');
   }
 };
+const findByCategory = async (categoryId) => {
+  try {
+    const rows = await knex('articles')
+      .join('categories', 'articles.category_id', '=', 'categories.category_id')
+      .select(
+        'articles.id',
+        'articles.title',
+        'articles.author',
+        'articles.abstract',
+        'articles.content',
+        'articles.is_premium',
+        'articles.views',
+        'categories.category_name'
+      )
+      .where('categories.category_id', categoryId);
 
-const findByCategory = async (categoryName) => {
+    return rows;
+  } catch (err) {
+    console.error(err);
+    throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục');
+  }
+};
+const findTop5ByCategory = async (categoryId) => {
   try {
     const rows = await knex('articles')
       .join('categories', 'articles.category_id', '=', 'categories.category_id')
@@ -175,7 +209,10 @@ const findByCategory = async (categoryName) => {
         'articles.is_premium',
         'categories.category_name'
       )
-      .where('categories.category_name', categoryName); // Filter by category name
+      .where('articles.category_id', categoryId)
+      .orderBy('articles.views', 'desc') // Sắp xếp giảm dần theo lượt xem
+      .limit(5); // Giới hạn chỉ lấy 5 bài viết
+
     return rows;
   } catch (err) {
     console.error(err);
@@ -228,27 +265,35 @@ const getTopCategories = async () => {
   }
   return topCategories;
 };
-const findTop5ByCategory = async (categoryId) => {
+const getCategories = async () => {
   try {
-    const rows = await knex('articles')
-      .join('categories', 'articles.category_id', '=', 'categories.category_id')
-      .select(
-        'articles.id',
-        'articles.title',
-        'articles.author',
-        'articles.abstract',
-        'articles.content',
-        'articles.is_premium',
-        'categories.category_name'
-      )
-      .where('articles.category_id', categoryId)
-      .orderBy('articles.views', 'desc') // Sắp xếp giảm dần theo lượt xem
-      .limit(5); // Giới hạn chỉ lấy 5 bài viết
+    // Truy vấn tất cả các chuyên mục, sắp xếp theo `id` tăng dần.
+    const rows = await knex('categories')
+      .select('id', 'category_name', 'parent_id')
+      .orderBy('id', 'asc');
 
-    return rows;
-  } catch (err) {
-    console.error(err);
-    throw new Error('Lỗi khi lấy danh sách bài viết theo danh mục và lượt xem');
+    const categories = {}; // Đối tượng để nhóm chuyên mục
+
+    // Đảm bảo nhóm `null` luôn tồn tại
+    categories[null] = [];
+
+    // Duyệt qua từng hàng (row) trong kết quả
+    rows.forEach(row => {
+      const { id, category_name, parent_id } = row;
+
+      // Nếu chưa có nhóm `parent_id` trong `categories`, khởi tạo mảng rỗng
+      if (!categories[parent_id]) {
+        categories[parent_id] = [];
+      }
+
+      // Thêm chuyên mục vào nhóm tương ứng
+      categories[parent_id].push({ id, category_name });
+    });
+
+    return categories; // Trả về danh sách chuyên mục dạng cây
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw new Error('Failed to fetch categories');
   }
 };
 export default {
@@ -265,6 +310,8 @@ export default {
   getTopArticlesByCategory,
   getTopArticlesThisWeek,
   getTopCategories,
+  getCategories,
   findByCategory,
-  findTop5ByCategory
+  findTop5ByCategory,
+  update,
 };

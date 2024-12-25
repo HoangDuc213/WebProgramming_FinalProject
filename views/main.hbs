@@ -5,7 +5,7 @@
         {{#each featuredArticles}}
         <div class="col-md-3 mb-4">
             <div class="card">
-                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <img src="{{this.image_url}}" class="card-img-top" alt="{{this.title}}">
                 <div class="card-body">
                     <h5 class="card-title">{{this.title}}</h5>
                     <p class="card-text">{{this.abstract}}</p>
@@ -21,7 +21,7 @@
         {{#each mostViewedArticles}}
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <img src="{{this.image_url}}" class="card-img-top" alt="{{this.title}}">
                 <div class="card-body">
                     <h5 class="card-title">{{this.title}}</h5>
                     <p class="card-text">{{this.abstract}}</p>
@@ -37,7 +37,7 @@
         {{#each latestArticles}}
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{this.imageURL}}" class="card-img-top" alt="{{this.title}}">
+                <img src="{{this.image_url}}" class="card-img-top" alt="{{this.title}}">
                 <div class="card-body">
                     <h5 class="card-title">{{this.title}}</h5>
                     <p class="card-text">{{this.abstract}}</p>
@@ -53,7 +53,7 @@
         {{#each categories}}
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{this.latestArticle.imageURL}}" class="card-img-top" alt="{{this.latestArticle.title}}">
+                <img src="{{this.latestArticle.image_url}}" class="card-img-top" alt="{{this.latestArticle.title}}">
                 <div class="card-body">
                     <h5 class="card-title">{{this.name}}: {{this.latestArticle.title}}</h5>
                     <p class="card-text">{{this.latestArticle.abstract}}</p>

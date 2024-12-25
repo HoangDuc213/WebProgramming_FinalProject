@@ -1,13 +1,11 @@
-export function isAuth(req, res, next) {
-  if (req.session.auth === false) {
-    req.session.retUrl = req.originalUrl;
-    return res.redirect('/account/login');
-  }
-  next();
-}
-export function isAdmin(req, res, next) {
-  if (req.session.authUser.permission < 2) {
-    return res.render('403');
-  }
-  next();
+export function isAuth(requiredPermission) {
+  return (req, res, next) => {
+    if (!req.session.authUser) {
+      return res.status(403).send('Bạn cần đăng nhập để thực hiện thao tác này.');
+    }
+    if (req.session.authUser.permission < requiredPermission) {
+      return res.status(403).send('Bạn không có quyền truy cập.');
+    }
+    next();
+  };
 }

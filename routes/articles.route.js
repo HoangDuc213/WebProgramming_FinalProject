@@ -1,12 +1,10 @@
 import express from 'express';
-import articleService from '../services/article.service.js';
+import articleService from '../service/article.service.js';
 import multer from 'multer';
-const upload = multer({ dest: 'uploads/' })
+import path from 'path';
+import fs from 'fs';
+import { isAuth } from '../middlewares/auth.mdw.js';
 const router = express.Router();
-router.post('/create', upload.single('image'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-});
 router.get('/home', async (req, res) => {
   try {
     // Lấy các bài viết nổi bật trong tuần (4 bài)
@@ -34,31 +32,58 @@ router.get('/home', async (req, res) => {
     res.status(500).send('Lỗi khi tải trang chủ');
   }
 });
-
-router.get('/create', (req, res) => {
-  res.render('articles/create', {
-    layout: 'main' // Dùng layout main.hbs
-  });
-});
-// Route: Xóa bài viết
-router.post('/delete/:id', async (req, res) => {
-  const articleId = parseInt(req.params.id);
-  try {
-    // Gọi service để xóa bài viết theo ID
-    await articleService.deleteById(articleId);
-    // Chuyển hướng về danh sách bài viết sau khi xóa thành công
-    res.redirect('/articles');
-  } catch (error) {
-    console.error('Lỗi khi xóa bài viết:', error);
-    res.status(500).send('Lỗi khi xóa bài viết');
+router.get(
+  '/create',
+  isAuth(2), 
+  (req, res) => {
+    res.render('articles/create', {
+      layout: 'main', // Dùng layout main.hbs
+    });
   }
+);
+
+// Route: Xóa bài viết
+router.post(
+  '/delete/:id',
+  isAuth(3), 
+  async (req, res) => {
+    const articleId = parseInt(req.params.id);
+    try {
+      // Gọi service để xóa bài viết theo ID
+      await articleService.deleteById(articleId);
+
+      // Chuyển hướng về danh sách bài viết sau khi xóa thành công
+      res.redirect('/articles');
+    } catch (error) {
+      console.error('Lỗi khi xóa bài viết:', error);
+      res.status(500).send('Lỗi khi xóa bài viết');
+    }
+  }
+);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Thư mục lưu file
+  },
+  filename: function (req, file, cb) {
+    const tempName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+    cb(null, tempName); // Lưu file với tên tạm
+  },
 });
+
+const upload = multer({ storage });
+
 // Route: Lưu bài viết mới vào cơ sở dữ liệu
-router.post('/create', async (req, res) => {
-  const { title, author, category_id, content , abstract} = req.body;
-  const is_premium = req.body.is_premium === 'on'; // Lấy giá trị checkbox
+router.post('/create', upload.single('image'), async (req, res) => {
+  const { title, author, category_id, content, abstract } = req.body;
+  const is_premium = req.body.is_premium === 'on'; // Giá trị checkbox
+  const uploadedFile = req.file; // Lấy file từ request
+
   try {
-    // Lưu bài viết mới vào cơ sở dữ liệu
+    if (!uploadedFile) {
+      return res.status(400).send('Hình ảnh là bắt buộc');
+    }
+
+    // Tạo bài viết mới
     const newArticle = await articleService.create({
       title,
       author,
@@ -67,10 +92,20 @@ router.post('/create', async (req, res) => {
       is_premium,
       abstract,
     });
-    // Chuyển hướng đến trang bài viết sau khi lưu thành công
-    res.redirect(`/articles/${newArticle.id}`);
+
+    // Đường dẫn mới cho file
+    const newFileName = `uploads/${newArticle.id}.png`;
+
+    // Đổi tên file tạm thành file đích với ID bài viết
+    fs.renameSync(uploadedFile.path, newFileName);
+
+    // Lưu đường dẫn file vào cơ sở dữ liệu (nếu cần)
+    await articleService.update(newArticle.id, { image_url: newFileName });
+
+    // Hoàn thành xử lý
+    res.redirect('/articles/home');
   } catch (error) {
-    console.error(error);
+    console.error('Lỗi khi tạo bài viết:', error);
     res.status(500).send('Lỗi khi tạo bài viết');
   }
 });
@@ -108,30 +143,47 @@ router.get('/', async (req, res) => {
 // Route: Hiển thị chi tiết bài viết
 router.get('/detail', async (req, res) => {
   const id = parseInt(req.query.id) || 0;
+
   try {
     const article = await articleService.findById(id); // Lấy chi tiết bài viết theo ID
-    const category = await articleService.findByCategory(id); // Lấy bài viết cùng danh mục
-    const top5category = await articleService.findTop5ByCategory(id); // Lấy 5 bài viết liên quan
-
-    console.log('Danh sách bài viết trong cùng danh mục:', category);
-    console.log('5 bài viết liên quan: ', top5category);
-
-    await articleService.incrementView(id); // Tăng lượt xem cho bài viết
 
     if (!article) {
       return res.status(404).send('Bài viết không tồn tại');
     }
 
-    // Truyền cả bài viết, danh mục và 5 bài viết liên quan vào view
+    // Kiểm tra bài viết Premium
+    if (article.is_premium) {
+      // Nếu người dùng chưa đăng nhập
+      if (!req.session.authUser) {
+        return res.status(403).render('403', {
+          message: 'Bạn cần đăng nhập và có quyền Premium để xem bài viết này.',
+        });
+      }
+
+      // Nếu người dùng đăng nhập nhưng không có quyền Premium
+      if (req.session.authUser.permission < 1) {
+        return res.status(403).render('403', {
+          message: 'Bạn cần đăng ký gói Premium để xem bài viết này.',
+        });
+      }
+    }
+
+    // Lấy bài viết cùng danh mục và 5 bài viết liên quan
+    const category = await articleService.findByCategory(id);
+    const top5category = await articleService.findTop5ByCategory(id);
+
+    // Tăng lượt xem bài viết
+    await articleService.incrementView(id);
+
+    // Truyền dữ liệu vào view
     res.render('articles/detail', { 
       article: article,
       category: category, // Các bài viết cùng danh mục
-      top5category: top5category // 5 bài viết liên quan
+      top5category: top5category, // 5 bài viết liên quan
     });
-
   } catch (error) {
-    console.error('Lỗi khi lấy bài viết:', error);
-    res.status(500).send('Đã xảy ra lỗi khi xử lý yêu cầu');
+    console.error(error);
+    res.status(500).send('Lỗi server');
   }
 });
 

@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
 
-import userService from '../services/user.service.js';
+import userService from '../service/user.service.js';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post('/register', async function (req, res) {
     name: req.body.name,
     email: req.body.email,
     dob: ymd_dob, // YYYY-MM-DD
-    permission: 3
+    permission: 4
   }
   const ret = await userService.add(entity);
   res.render('vwAccount/register');
